@@ -15,20 +15,37 @@ var sort = BUNNY.SORT;
 /**
  * 
  * @param {Object} list
+ * obj = {list: list, order: asc/des}
  */
-BUNNY.SORT.insertionSort = function(list){
+BUNNY.SORT.insertionSort = function(obj){
+	if(obj.order === 'null'){
+		obj.order = 'asc';
+	}
+	else if(obj.order !== 'asc' && obj.order !== 'des'){
+		obj.order = 'asc';
+	}
 	
-	function ascending(){
-		for(var i=0; i < list.length; i++){
-			key = list[i];
+	if(obj.list.length > 1){
+		for(var i=0; i < obj.list.length; i++){
+			key = obj.list[i];
 			
 			j = i - 1;
-			while(j >= 0 && list[j])
+			
+			if(obj.order === 'asc'){
+				while(j >= 0 && obj.list[j] > key){
+					obj.list[j+1] = obj.list[j];
+					j--;
+				}
+			}
+			else if(obj.order === 'des'){
+				while(j >= 0 && obj.list[j] < key){
+					obj.list[j+1] = obj.list[j];
+					j--;
+				}
+			}
+			obj.list[j+1] = key;
 		}
 	}
 	
-	return {
-		list: list,
-		asc: ascending
-	};
+	return obj.list;
 };
