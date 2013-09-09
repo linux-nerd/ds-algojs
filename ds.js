@@ -472,3 +472,47 @@ BUNNY.DS.BinarySearchTree = function(){
 	};
 };
 
+
+/**
+ * Implementation of the HashTable goes here.
+ */
+BUNNY.DS.HashTable = function(){
+	var storage = [], max = 1000;
+	
+	var hashFunction = function(str, max){
+		var hash = 0;
+		if(str.length == 0){
+			return hash;
+		}
+		
+		for(var i = 0; i < str.length; i++){
+			hash = (hash<<5) - hash;
+			hash = hash + str.charCodeAt(i);
+			hash = hash & hash //convert it to 32 bit integer
+		}
+		
+		return Math.abs(hash % max);
+	}
+	
+	return{
+		get: function(key){
+			//code for retrieving the data 
+		},
+		put: function (key, val) {
+			var linkedLists = ds.linkedList();
+			
+			if(typeof key === 'undefined'){
+				throw("Cannot insert with undefined key!");
+			}
+			var hashIndex = hashFunction(key);
+			
+			if(storage[hashIndex] && typeof storage[hashIndex].next !== 'undefined' && storage[hashIndex].next !== null){
+				linkedLists.add(val);
+			}else{
+				linkedLists.add("hashtableStart");
+				linkedLists.add(val);
+			}
+		}
+	};
+}
+
