@@ -383,20 +383,20 @@ BUNNY.DS.linkedList = function(){
 };
 
 
-BUNNY.DS.makeBSTNode(data){
-	return {
-		data: data,
-		left: null,
-		right: null
-	};
-};
+// BUNNY.DS.createBSTNode(data){
+	// return {
+		// data: data,
+		// left: null,
+		// right: null
+	// };
+// };
 
 BUNNY.DS.BinarySearchTree = function(){
 	/*
 	 * Private
 	 * this is the root of the binary tree
 	 */
-	var node, length = 0;
+	var node, length = 0, root;
 	
 	return {
 		/**
@@ -404,11 +404,15 @@ BUNNY.DS.BinarySearchTree = function(){
  		 * @param {Object} data
 		 */
 		add: function(data){
-			var node = ds.makeBSTNode(data),
+			var node = {
+					data: data,
+					left: null,
+					right: null
+				},
 				current;
 				
 			//if the BST is empty
-			if(isEmpty()){
+			if(this.isEmpty()){
 				root = node;
 			}
 			else{
@@ -468,6 +472,9 @@ BUNNY.DS.BinarySearchTree = function(){
 			}
 			
 			return found;
+		},
+		getNode: function(){
+			return node;
 		}
 	};
 };
@@ -478,6 +485,7 @@ BUNNY.DS.BinarySearchTree = function(){
  */
 BUNNY.DS.HashTable = function(){
 	var storage = [], max = 1000;
+	var linkedLists = ds.linkedList();
 	
 	var hashFunction = function(str, max){
 		var hash = 0;
@@ -490,8 +498,10 @@ BUNNY.DS.HashTable = function(){
 			hash = hash + str.charCodeAt(i);
 			hash = hash & hash //convert it to 32 bit integer
 		}
-		
-		return Math.abs(hash % max);
+		// console.log(hash % 1000);
+		var data =  Math.abs(hash % max);
+
+		return data;
 	}
 	
 	return{
@@ -499,20 +509,30 @@ BUNNY.DS.HashTable = function(){
 			//code for retrieving the data 
 		},
 		put: function (key, val) {
-			var linkedLists = ds.linkedList();
+			
 			
 			if(typeof key === 'undefined'){
 				throw("Cannot insert with undefined key!");
 			}
-			var hashIndex = hashFunction(key);
+			var hashIndex = hashFunction(key, max);
 			
 			if(storage[hashIndex] && typeof storage[hashIndex].next !== 'undefined' && storage[hashIndex].next !== null){
-				linkedLists.add(val);
+				linkedLists.add({k: key, v:val});
+				console.log(storage[hashIndex]);
 			}else{
+				
 				linkedLists.add("hashtableStart");
-				linkedLists.add(val);
+				storage[hashIndex] = linkedLists.head();
+				linkedLists.add({k: key, v:val});
+				
+				
 			}
+		},
+		getStorage: function(){
+			return storage;
 		}
 	};
-}
+};
+
+ds = BUNNY.DS;
 
